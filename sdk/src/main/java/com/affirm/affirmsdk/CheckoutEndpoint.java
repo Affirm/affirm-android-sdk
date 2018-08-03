@@ -35,16 +35,20 @@ final class CheckoutEndpoint implements AffirmRequest.Endpoint {
 
   private JsonObject buildJsonRequest(Checkout checkout) {
     final JsonObject configJson = new JsonObject();
+    final JsonObject metadataJson = new JsonObject();
     final JsonObject jsonRequest = new JsonObject();
     final JsonParser jsonParser = new JsonParser();
     final JsonObject checkoutJson = jsonParser.parse(gson.toJson(checkout)).getAsJsonObject();
     final JsonObject merchantJson = jsonParser.parse(gson.toJson(merchant)).getAsJsonObject();
 
     configJson.addProperty("user_confirmation_url_action", "GET");
+    metadataJson.addProperty("platform_type", "Affirm Android SDK");
+    metadataJson.addProperty("platform_affirm", BuildConfig.VERSION_NAME);
 
     checkoutJson.add("merchant", merchantJson);
     checkoutJson.add("config", configJson);
     checkoutJson.addProperty("api_version", "v2");
+    checkoutJson.add("metadata", metadataJson);
 
     jsonRequest.add("checkout", checkoutJson);
 

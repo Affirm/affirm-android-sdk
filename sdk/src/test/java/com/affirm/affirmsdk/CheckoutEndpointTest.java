@@ -1,5 +1,6 @@
 package com.affirm.affirmsdk;
 
+import android.os.Build;
 import com.affirm.affirmsdk.di.AffirmInjector;
 import com.affirm.affirmsdk.models.Checkout;
 import com.affirm.affirmsdk.models.CheckoutResponse;
@@ -25,16 +26,8 @@ import static org.mockito.Matchers.any;
 @RunWith(MockitoJUnitRunner.class) public class CheckoutEndpointTest {
 
   final static String expectedBody =
-      "{\"checkout\":{\"items\":{\"wheel\":{\"display_name\":\"Great Deal Wheel\",\"sku\":\"wheel\","
-          + "\"unit_price\":100000,\"qty\":1,\"item_url\":\"http://merchant.com/great_deal_wheel\",\"item_image_url\""
-          + ":\"http://www.image.com/111\"}},\"shipping\":{\"address\":{\"line1\":\"333 Kansas st\",\"city\""
-          + ":\"San Francisco\",\"state\":\"CA\",\"zipcode\":\"94103\",\"country\":\"USA\"},\"name\":"
-          + "{\"full\":\"John Smith\"}},\"billing\":{\"address\":{\"line1\":\"333 Kansas st\",\"city\":"
-          + "\"San Francisco\",\"state\":\"CA\",\"zipcode\":\"94103\",\"country\":\"USA\"},\"name\":{\"full\""
-          + ":\"John Smith\"}},\"shipping_amount\":100000,\"tax_amount\":10000,\"total\":110000,\"merchant\""
-          + ":{\"public_api_key\":\"sdf\",\"user_confirmation_url\":\"affirm://checkout/confirmed\","
-          + "\"user_cancel_url\":\"affirm://checkout/cancelled\"},\"config\":{\"user_confirmation_url_action"
-          + "\":\"GET\"},\"api_version\":\"v2\"}}";
+      "{\"checkout\":{\"items\":{\"wheel\":{\"display_name\":\"Great Deal Wheel\",\"sku\":\"wheel\",\"unit_price\":100000,\"qty\":1,\"item_url\":\"http://merchant.com/great_deal_wheel\",\"item_image_url\":\"http://www.image.com/111\"}},\"shipping\":{\"address\":{\"line1\":\"333 Kansas st\",\"city\":\"San Francisco\",\"state\":\"CA\",\"zipcode\":\"94103\",\"country\":\"USA\"},\"name\":{\"full\":\"John Smith\"}},\"billing\":{\"address\":{\"line1\":\"333 Kansas st\",\"city\":\"San Francisco\",\"state\":\"CA\",\"zipcode\":\"94103\",\"country\":\"USA\"},\"name\":{\"full\":\"John Smith\"}},\"shipping_amount\":100000,\"tax_amount\":10000,\"total\":110000,\"merchant\":{\"public_api_key\":\"sdf\",\"user_confirmation_url\":\"affirm://checkout/confirmed\",\"user_cancel_url\":\"affirm://checkout/cancelled\"},\"config\":{\"user_confirmation_url_action\":\"GET\"},\"api_version\":\"v2\",\"metadata\":{\"platform_type\":\"Affirm Android SDK\",\"platform_affirm\":"
+          + "\"" + BuildConfig.VERSION_NAME + "\"}}}";
 
   @Mock AffirmRequest.Callback<CheckoutResponse> callback;
   @Mock OkHttpClient okHttpClient;

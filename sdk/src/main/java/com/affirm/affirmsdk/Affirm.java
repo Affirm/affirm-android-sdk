@@ -45,21 +45,19 @@ public final class Affirm {
   }
 
   public enum Environment {
-    SANDBOX("sandbox.affirm.com", "cdn1-sandbox.affirm.com", "tracker.affirm.com"),
-    PRODUCTION("api-cf.affirm.com", "cdn1.affirm.com", "tracker.affirm.com");
+    SANDBOX("sandbox.affirm.com", "tracker.affirm.com"),
+    PRODUCTION("api-cf.affirm.com", "tracker.affirm.com");
 
     final String baseUrl1;
-    final String baseUrl2;
     final String kibanaBaseUrl;
 
-    Environment(String baseUrl1, String baseUrl2, String kibanaBaseUrl) {
+    Environment(String baseUrl1, String kibanaBaseUrl) {
       this.baseUrl1 = baseUrl1;
-      this.baseUrl2 = baseUrl2;
       this.kibanaBaseUrl = kibanaBaseUrl;
     }
 
     @Override public String toString() {
-      return "Environment{" + baseUrl1 + ", " + baseUrl2 + ", " + kibanaBaseUrl + '}';
+      return "Environment{" + baseUrl1 + ", " + kibanaBaseUrl + '}';
     }
   }
 
@@ -177,7 +175,7 @@ public final class Affirm {
       @NonNull SpannablePromoCallback promoCallback) {
 
     final PromoJob promoJob = new PromoJob(component.provideGson(), component.provideOkHttpClient(),
-        component.provideTracking(), merchant, environment.baseUrl2, textSize, typeface, promoId,
+        component.provideTracking(), merchant, environment.baseUrl1, textSize, typeface, promoId,
         amount, logoType, affirmColor, context, promoCallback);
     return promoJob.getPromo();
   }
@@ -215,7 +213,7 @@ public final class Affirm {
     };
 
     final PromoJob promoJob = new PromoJob(component.provideGson(), component.provideOkHttpClient(),
-        component.provideTracking(), merchant, environment.baseUrl2, textView.getTextSize(),
+        component.provideTracking(), merchant, environment.baseUrl1, textView.getTextSize(),
         textView.getTypeface(), promoId, amount, logoType, affirmColor, textView.getContext(),
         spannablePromoCallback);
     return promoJob.getPromo();

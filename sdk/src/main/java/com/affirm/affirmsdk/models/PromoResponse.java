@@ -5,11 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
 @AutoValue public abstract class PromoResponse {
-  public abstract String pricingTemplate();
-
-  public abstract Float apr();
-
-  public abstract Integer termLength();
+  public abstract Promo promo();
 
   public static TypeAdapter<PromoResponse> typeAdapter(Gson gson) {
     return new AutoValue_PromoResponse.GsonTypeAdapter(gson);
@@ -20,11 +16,7 @@ import com.google.gson.TypeAdapter;
   }
 
   @AutoValue.Builder public abstract static class Builder {
-    public abstract Builder setApr(Float value);
-
-    public abstract Builder setTermLength(Integer value);
-
-    public abstract Builder setPricingTemplate(String value);
+    public abstract Builder setPromo(Promo value);
 
     public abstract PromoResponse build();
   }

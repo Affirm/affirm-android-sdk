@@ -79,7 +79,8 @@ class AffirmRequest<T> {
 
           return;
         }
-        final T res = gson.fromJson(response.body().string(), clazz);
+        final String bodyString = response.body().string();
+        final T res = gson.fromJson(bodyString, clazz);
         callback.onSuccess(res);
       }
     });

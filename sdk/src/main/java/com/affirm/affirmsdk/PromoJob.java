@@ -3,8 +3,6 @@ package com.affirm.affirmsdk;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
-import com.affirm.affirmsdk.models.NewPromoResponse;
-import com.affirm.affirmsdk.models.PricingResponse;
 import com.affirm.affirmsdk.models.PromoResponse;
 import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
@@ -14,7 +12,7 @@ class PromoJob {
   private final String baseUrl;
   private final String publicKey;
   private final String promoId;
-  private final float amount;
+  private final float dollarAmount;
   private final float textSize;
   private final Typeface typeface;
   private final AffirmLogoType logoType;
@@ -36,7 +34,7 @@ class PromoJob {
     this.typeface = typeface;
     this.publicKey = publicKey;
     this.promoId = promoId;
-    this.amount = amount;
+    this.dollarAmount = amount;
     this.logoType = logoType;
     this.affirmColor = affirmColor;
     this.callback = callback;
@@ -47,11 +45,7 @@ class PromoJob {
   }
 
   CancellableRequest getPromo() {
-    if (promoId.startsWith("promo_set")) {
-      getNewPromoResponse();
-    } else {
-      getPromoResponse();
-    }
+    getNewPromoResponse();
 
     return new CancellableRequest() {
       @Override public void cancelRequest() {
@@ -63,8 +57,9 @@ class PromoJob {
     };
   }
 
-  private void getPromoResponse() {
-    final AffirmRequest.Endpoint endpoint = new PromoEndpoint(promoId, publicKey);
+  private void getNewPromoResponse() {
+    int centAmount = AffirmUtils.decimalDollarsToIntegerCents(dollarAmount);
+    final AffirmRequest.Endpoint endpoint = new PromoEndpoint(promoId, centAmount, publicKey);
     final AffirmRequest<PromoResponse> request =
         new AffirmRequest<>(PromoResponse.class, baseUrl, client, gson, endpoint, tracker);
     currentRequest = request;
@@ -72,45 +67,8 @@ class PromoJob {
     request.create(new AffirmRequest.Callback<PromoResponse>() {
       @Override public void onSuccess(PromoResponse result) {
         if (!isCancelled) {
-          getPricing(result);
+          callback.onPromoWritten(updateSpan(result.promo().ala()));
         }
-      }
-
-      @Override public void onFailure(Throwable throwable) {
-        returnError(throwable);
-      }
-    });
-  }
-
-  private void getNewPromoResponse() {
-    final AffirmRequest.Endpoint endpoint = new NewPromoEndpoint(promoId, publicKey);
-    final AffirmRequest<NewPromoResponse> request =
-        new AffirmRequest<>(NewPromoResponse.class, baseUrl, client, gson, endpoint, tracker);
-    currentRequest = request;
-
-    request.create(new AffirmRequest.Callback<NewPromoResponse>() {
-      @Override public void onSuccess(NewPromoResponse result) {
-        if (!isCancelled) {
-          getPricing(result.toPromoResponse(AffirmUtils.decimalDollarsToIntegerCents(amount)));
-        }
-      }
-
-      @Override public void onFailure(Throwable throwable) {
-        returnError(throwable);
-      }
-    });
-  }
-
-  private void getPricing(final PromoResponse promoResponse) {
-
-    final AffirmRequest.Endpoint endpoint = new PricingEndpoint(publicKey, amount, promoResponse);
-    final AffirmRequest<PricingResponse> request =
-        new AffirmRequest<>(PricingResponse.class, baseUrl, client, gson, endpoint, tracker);
-    currentRequest = request;
-
-    request.create(new AffirmRequest.Callback<PricingResponse>() {
-      @Override public void onSuccess(PricingResponse result) {
-        callback.onPromoWritten(updateSpan(promoResponse, result));
       }
 
       @Override public void onFailure(Throwable throwable) {
@@ -123,10 +81,9 @@ class PromoJob {
     callback.onFailure(e);
   }
 
-  private SpannableString updateSpan(PromoResponse promoResponse, PricingResponse pricingResponse) {
+  private SpannableString updateSpan(String template) {
     final PromoSpannable promoSpannable = new PromoSpannable();
-    return promoSpannable.spannableFromEditText(promoResponse.pricingTemplate(),
-        "$" + pricingResponse.paymentString(), promoResponse.apr(), textSize, typeface, logoType,
+    return promoSpannable.spannableFromEditText(template, textSize, typeface, logoType,
         affirmColor, context);
   }
 }

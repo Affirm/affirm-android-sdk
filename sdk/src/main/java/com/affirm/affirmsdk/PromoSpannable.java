@@ -18,8 +18,6 @@ import static com.affirm.affirmsdk.AffirmLogoType.AffirmDisplayTypeText;
 
 public class PromoSpannable {
   private static final String LOGO_PLACEHOLDER = "{affirm_logo}";
-  private static final String PAYMENT_PLACEHOLDER = "{payment}";
-  private static final String APR_PLACEHOLDER = "{lowest_apr}";
   private final Paint paint;
 
   public PromoSpannable() {
@@ -50,10 +48,10 @@ public class PromoSpannable {
 
     SpannableString spannableString;
 
-    if (logoDrawable != null) {
+    int index = template.indexOf(LOGO_PLACEHOLDER);
+    if (logoDrawable != null && index != -1) {
       spannableString = new SpannableString(template);
       ImageSpan imageSpan = getLogoSpan(textSize, logoDrawable, color);
-      int index = template.indexOf(LOGO_PLACEHOLDER);
       spannableString.setSpan(imageSpan, index, index + LOGO_PLACEHOLDER.length(),
           Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
     } else {
@@ -64,8 +62,8 @@ public class PromoSpannable {
     return spannableString;
   }
 
-  public SpannableString spannableFromEditText(@NonNull String template, @NonNull String payment,
-      float apr, float textSize, @NonNull Typeface typeface, @NonNull AffirmLogoType logoType,
+  public SpannableString spannableFromEditText(@NonNull String template, float textSize,
+      @NonNull Typeface typeface, @NonNull AffirmLogoType logoType,
       @NonNull AffirmColor affirmColor, @NonNull Context context) {
 
     Resources resources = context.getResources();
@@ -76,10 +74,6 @@ public class PromoSpannable {
     }
 
     int color = resources.getColor(affirmColor.getColorRes());
-
-    template = template.replace(PAYMENT_PLACEHOLDER, payment);
-
-    template = template.replace(APR_PLACEHOLDER, String.valueOf(apr));
 
     return getSpannable(template, textSize, logoDrawable, typeface, color);
   }
@@ -96,8 +90,6 @@ public class PromoSpannable {
     }
 
     int color = resources.getColor(affirmColor.getColorRes());
-
-    template = template.replace(PAYMENT_PLACEHOLDER, payment);
 
     return getSpannable(template, textView.getTextSize(), logoDrawable, textView.getTypeface(),
         color);

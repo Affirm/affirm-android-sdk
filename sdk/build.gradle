@@ -105,7 +105,7 @@ dependencies {
   testImplementation 'com.google.truth:truth:0.28'
   testImplementation 'junit:junit:4.12'
   testImplementation 'org.robolectric:robolectric:3.5.1'
-  testImplementation 'org.mockito:mockito-core:2.10.0'
+  testImplementation 'org.mockito:mockito-core:2.21.0'
   testImplementation "com.squareup.okhttp3:okhttp:$OK_HTTP_VERSION"
   testImplementation "com.google.code.gson:gson:$GSON_VERSION"
   testImplementation "com.squareup.okhttp3:mockwebserver:$OK_HTTP_VERSION"

@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
               @Override public void run() {
                 Toast.makeText(MainActivity.this, "As low as label : " + throwable.getMessage(),
                     Toast.LENGTH_LONG).show();
-                aslowasPromo = null;
+                aslowasPromo2 = null;
               }
             });
           }

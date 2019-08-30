@@ -1,3 +1,5 @@
+:no_entry: [DEPRECATED] Active at https://github.com/Affirm/affirm-merchant-sdk-android
+
 ## If this is your first time integrating this Affirm android SDK, please use the following repository:
 ```
 github "Affirm/affirm-merchant-sdk-android"
